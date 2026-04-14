@@ -1,0 +1,11 @@
+//KC03D26C JOB CLASS=A,MSGCLASS=O,MSGLEVEL=(1,1),NOTIFY=KC03D26,
+//             TIME=(,5)
+//JCLLIB       JCLLIB ORDER=KC02788.ALU9999.PROCLIB
+//***************************************************************
+//* COMPILA EL PROGRAMA
+//***************************************************************
+//STEP1   EXEC COMPCOBO,
+//             ALUMLIB=KC03D26.CURSOS,
+//             GOPGM=PG33CD26
+//COBOL.SYSLIB DD DSN=KC03D26.CURSOS.COPYLIB,DISP=SHR
+//

@@ -1,0 +1,36 @@
+//***************************************************************
+//* COPIA UN DATASET CONVIRTIENDO UNO DE LOS CAMPOS A COMP-3
+//***************************************************************
+//KC03D26X JOB CLASS=A,MSGCLASS=O,MSGLEVEL=(1,1),NOTIFY=KC03D26,
+//             TIME=(,5),REGION=0M
+//JCLLIB       JCLLIB ORDER=KC02788.ALU9999.PROCLIB
+//***************************************************************
+//* BORRA ARCHIVO DE PROCESO, SI EXISTE
+//***************************************************************
+//STEP2   EXEC PGM=IDCAMS
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+  DELETE KC03D26.REPORTE.CARBASE.OUT
+  IF MAXCC = 8 THEN SET MAXCC = 0
+//***************************************************************
+//* APLICA SORT EN ARCHIVO DE NOVEDADES
+//***************************************************************
+//STEP3B  EXEC PGM=SORT
+//SYSOUT    DD SYSOUT=*
+//SORTIN    DD DSN=KC03D26.REPORTE.CARBASE,DISP=SHR
+//SORTOUT   DD DSN=KC03D26.REPORTE.CARBASE.OUT,
+//             DISP=(NEW,CATLG,DELETE),
+//             UNIT=SYSDA,VOL=SER=ZASWO1,
+//             DCB=(LRECL=76,BLKSIZE=7600,RECFM=FB),
+//             SPACE=(TRK,(1,1),RLSE)
+//SYSIN     DD *
+  SORT FIELDS=COPY
+  OUTREC FIELDS=(1,70,71,10,ZD,TO=PD,LENGTH=6)
+//* 1  = INICIO DE REGISTRO
+//* 70 = BYTE ANTERIOR AL CAMPO A MODIFICAR
+//* 71 = INICIO DEL CAMPO A MODIFICAR
+//* 10 = TAMA¬O DEL CAMPO A MODIFICAR
+//* ZD = FORMATO ACTUAL
+//* PD = FORMATO DESTINO (COMP-3)
+//* LENGTH=6 = BYTES QUE OCUPARA EL COMP-3
+//

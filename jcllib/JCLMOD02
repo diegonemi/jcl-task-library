@@ -1,0 +1,24 @@
+//KC03D26Z JOB CLASS=A,MSGCLASS=O,MSGLEVEL=(1,1),
+//             NOTIFY=&SYSUID,TIME=(,5),RESTART=STEP2
+//***********************************************
+//* CREACION DE GDG BASE
+//***********************************************
+//STEP1   EXEC PGM=IDCAMS
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *
+   DEFINE GDG (NAME(KC03D26.GDG.LOG250) -
+              EMPTY                     -
+              SCRATCH                   -
+              LIMIT(10))
+//***********************************************
+//* CREACION DE PROMERA GENERACION
+//***********************************************
+//STEP2   EXEC PGM=IEFBR14
+//GDGBASE  DD  DSN=KC03D26.GDG.LOG250(+1),
+//             DISP=(NEW,CATLG,DELETE),
+//             UNIT=SYSDA,VOL=SER=KCTR55,
+//             DCB=(LRECL=50,BLKSIZE=5500,RECFM=FB),
+//             SPACE=(TRK,(1,1),RLSE)
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+//

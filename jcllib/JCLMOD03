@@ -1,0 +1,50 @@
+//KC03D26X JOB CLASS=A,MSGCLASS=O,MSGLEVEL=(1,1),NOTIFY=KC03D26,
+//             TIME=(,3)
+//***************************************************************
+//* BORRA LOS ARCHIVOS INICIALES
+//***************************************************************
+//STEP1   EXEC PGM=IDCAMS,COND=(8,LT)
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+  DELETE       KC03D26.REPORTE.N17.QSAM.E2B
+  DELETE       KC03D26.REPORTE.N17.VSAM.E1A CLUSTER PURGE
+  IF MAXCC = 8 THEN SET MAXCC = 0
+//***************************************************************
+//* ORDENA EL QSAM
+//***************************************************************
+//SORT1   EXEC PGM=SORT,COND=EVEN
+//SYSOUT    DD SYSOUT=*
+//SORTIN    DD DSN=KC03D26.REPORTE.N17.QSAM.E2A,DISP=SHR
+//SORTOUT   DD DSN=KC03D26.REPORTE.N17.QSAM.E2B,
+//             DCB=(LRECL=244,BLKSIZE=27816,RECFM=FB),
+//             SPACE=(TRK,(1,1),RLSE),DISP=(,CATLG)
+//SYSIN     DD *
+  SORT FORMAT=BI,FIELDS=(1,17,A)
+//***************************************************************
+//* DEFINE EL CLUSTER VSAM
+//***************************************************************
+//STEP2   EXEC PGM=IDCAMS,COND=(8,LT)
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+  DEFINE       CLUSTER(NAME(KC03D26.REPORTE.N17.VSAM.E1A)      -
+               INDEXED                                         -
+               CYL(1 1)                                        -
+               KEYS(17 0)                                      -
+               RECORDSIZE(244 244)                             -
+               FREESPACE(10 5)                                 -
+               CONTROLINTERVALSIZE(4096)                       -
+               VOLUMES(KCTR57)                                 -
+               SHR(2 3))                                       -
+  DATA         (NAME(KC03D26.REPORTE.N17.VSAM.E1A.DATA))       -
+  INDEX        (NAME(KC03D26.REPORTE.N17.VSAM.E1A.INDX))
+//***************************************************************
+//* INICIALIZA VSAM KSDS DESDE EL QSAM ORDENADO
+//***************************************************************
+//STEP3   EXEC PGM=IDCAMS,REGION=0M
+//ENTRADA   DD DSN=KC03D26.REPORTE.N17.QSAM.E2B,DISP=SHR
+//SALIDA    DD DSN=KC03D26.REPORTE.N17.VSAM.E1A,DISP=SHR
+//SYSIN     DD *
+  REPRO        INFILE(ENTRADA) OUTFILE(SALIDA) REPLACE
+//SYSPRINT  DD SYSOUT=*
+//SYSOUT    DD SYSOUT=*
+//

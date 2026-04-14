@@ -1,0 +1,12 @@
+//KC03D26X JOB CLASS=A,MSGCLASS=O,MSGLEVEL=(1,1),NOTIFY=KC03D26,
+//             TIME=(,3)
+//***************************************************************
+//* MODIFICA EL NOMBRE DE UN ARCHIVO VSAM
+//***************************************************************
+//STEP1   EXEC PGM=IDCAMS
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+     ALTER KC03D26.REPORTE.CLIENTES.KSDS.VSAM.INDX   -
+     NEWNAME(KC03D26.REPORTE.N13.VSAM.E1A.INDX)
+/*
+//
