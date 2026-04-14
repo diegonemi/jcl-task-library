@@ -3,13 +3,6 @@
 ## Overview
 This repository contains a curated collection of special JCL routines designed for specific tasks in mainframe environments. It showcases dataset manipulation, GDG management, VSAM cluster operations, and compilation processes for COBOL, CICS, DB2, and BMS maps. The goal is to provide practical examples and reusable scripts for exceptional scenarios.
 
-## Repository Structure
-jcl-special-cases/
-  ├── src/              # JCL source routines
-  ├── docs/             # Documentation and notes
-  ├── tests/            # Test cases and validation scripts
-  └── README.md         # Project overview
-
 ## Routines Included
 JCLMOD01 - Copies a dataset and modifies a decimal field to COMP-3 format  
 JCLMOD02 - Creates a GDG (Generation Data Group) dataset  
